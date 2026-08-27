@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
-import client from "../api/client";
+import { LineChart, Line, XAxis, YAxis, Tooltip } from "recharts";
 
-export default function Ticker() {
-  const [symbols, setSymbols] = useState([]);
+export default function LiveTicker({ symbol = "AAPL" }) {
+  const [ticks, setTicks] = useState([]);
 
   useEffect(() => {
-    client.get("/api/symbols/").then((res) => setSymbols(res.data));
-  }, []);
+    const ws = new WebSocket(`ws://localhost:8000/ws/live-feed/${symbol}`);
+    ws.onmessage = (event) => {
+      const tick = JSON.parse(event.data);
+      setTicks((prev) => [...prev.slice(-49), tick]); // keep last 50 points
+    };
+    return () => ws.close();
+  }, [symbol]);
 
   return (
-    <ul>
-      {symbols.map((s) => (
-        <li key={s.ticker}>{s.ticker} — {s.name}</li>
-      ))}
-    </ul>
+    <LineChart width={600} height={250} data={ticks}>
+      <XAxis dataKey="volume" hide />
+      <YAxis domain={["auto", "auto"]} />
+      <Tooltip />
+      <Line type="monotone" dataKey="price" dot={false} />
+    </LineChart>
   );
 }
