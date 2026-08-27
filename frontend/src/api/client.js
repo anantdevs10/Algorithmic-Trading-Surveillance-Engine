@@ -5,5 +5,3 @@ const client = axios.create({
 });
 
 export default client;
-
-// one shared Axios instance so every component hits the same base URL.

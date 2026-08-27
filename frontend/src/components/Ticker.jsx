@@ -8,8 +8,6 @@ export default function Ticker() {
     client.get("/api/symbols/").then((res) => setSymbols(res.data));
   }, []);
 
-  //symbols.map((s) => ...): Loops through the fetched array of stock objects and renders an <li> for each one displaying its ticker and company name (e.g., AAPL — AAPL).
-
   return (
     <ul>
       {symbols.map((s) => (
@@ -18,6 +16,3 @@ export default function Ticker() {
     </ul>
   );
 }
-
-
-// fetches the watchlist once on mount using useEffect, sotres it in state, renders it
