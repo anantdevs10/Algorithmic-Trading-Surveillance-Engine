@@ -18,6 +18,50 @@ class MarketData(Base):
     close = Column(Float)
     volume = Column(Integer)
 
+class BacktestResult(Base):
+    __tablename__ = "backtest_results"
+    id = Column(Integer, primary_key=True, index=True)
+    ticker = Column(String)
+    strategy_config = Column(String)  # store as JSON string
+    return_pct = Column(Float)
+    win_rate = Column(Float)
+    max_drawdown = Column(Float)
+    created_at = Column(DateTime)
+
+class PaperOrder(Base):
+    __tablename__ = "paper_orders"
+    id = Column(Integer, primary_key=True, index=True)
+    ticker = Column(String)
+    side = Column(String)     # "buy" / "sell"
+    quantity = Column(Float)
+    fill_price = Column(Float)
+    timestamp = Column(DateTime)
+
+class PaperPosition(Base):
+    __tablename__ = "paper_positions"
+    id = Column(Integer, primary_key=True, index=True)
+    ticker = Column(String, unique=True)
+    quantity = Column(Float)
+    avg_price = Column(Float)
+
+class OrderEvent(Base):
+    __tablename__ = "order_events"
+    id = Column(Integer, primary_key=True, index=True)
+    ticker = Column(String)
+    side = Column(String)
+    price = Column(Float)
+    quantity = Column(Float)
+    event_type = Column(String)  # "new" / "cancel" / "fill"
+    timestamp = Column(DateTime)
+
+class Alert(Base):
+    __tablename__ = "alerts"
+    id = Column(Integer, primary_key=True, index=True)
+    ticker = Column(String)
+    rule_flags = Column(String)   # JSON list of triggered rule names
+    anomaly_score = Column(Float, default=0.0)
+    severity = Column(String)     # "low" / "medium" / "high" / "critical"
+    timestamp = Column(DateTime)
 
 '''
 CREATING TWO TABLES using the parent classes using SQLAlchemy
