@@ -63,6 +63,12 @@ class Alert(Base):
     severity = Column(String)     # "low" / "medium" / "high" / "critical"
     timestamp = Column(DateTime)
 
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+    role = Column(String)  # "analyst" / "admin"
 '''
 CREATING TWO TABLES using the parent classes using SQLAlchemy
 Symbol Table --> Stores assets and stock identifiers, id, ticker(eg MICROSOFT = MSFT), name of company
