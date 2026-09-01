@@ -1,5 +1,5 @@
 from datetime import datetime
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models import MarketData, PaperOrder, PaperPosition
@@ -14,6 +14,8 @@ def submit_order(symbol: str, side: str, quantity: float, db: Session = Depends(
         .order_by(MarketData.timestamp.desc())
         .first()
     )
+    if latest is None:
+        raise HTTPException(status_code=404, detail=f"No market data for {symbol.upper()}")
     fill_price = latest.close
 
     order = PaperOrder(ticker=symbol.upper(), side=side, quantity=quantity,

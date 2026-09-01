@@ -1,8 +1,9 @@
+import random
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
 from .database import SessionLocal, engine, Base
-from .models import Symbol, MarketData
+from .models import Symbol, MarketData, OrderEvent
 
 def random_walk_ohlcv(start_price=100.0, periods=500, seed=None): # generates 500 minutes of fake prices starting at £100 a share
     rng = np.random.default_rng(seed) # random number generator created
