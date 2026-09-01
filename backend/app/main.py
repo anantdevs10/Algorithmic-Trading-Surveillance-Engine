@@ -27,3 +27,4 @@ app.add_middleware(
 @app.on_event("startup")
 async def start_surveillance():
     asyncio.create_task(run_surveillance_loop(ws_alerts.alert_manager.broadcast))
+
